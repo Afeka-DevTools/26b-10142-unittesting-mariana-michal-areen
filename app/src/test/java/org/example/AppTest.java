@@ -147,4 +147,159 @@ class AppTest {
             App.average(new int[]{});
         }, "Calculating average of an empty array should throw IllegalArgumentException");
     }
+
+// ==========================================
+    // בדיקות עבור הפונקציה fibonacciUpTo
+    // ==========================================
+
+    @Test
+    void testFibonacciUpToNormalLimit() {
+        // Arrange
+        List<Integer> expected = List.of(0, 1, 1, 2, 3, 5, 8);
+        
+        // Act
+        List<Integer> result = App.fibonacciUpTo(10);
+        
+        // Assert
+        assertEquals(expected, result, "Should return Fibonacci sequence up to 10");
+        assertFalse(result.isEmpty(), "The result list should not be empty");
+    }
+
+    @Test
+    void testFibonacciUpToZero() {
+        // Arrange
+        List<Integer> expected = List.of(0);
+        
+        // Act
+        List<Integer> result = App.fibonacciUpTo(0);
+        
+        // Assert
+        assertEquals(expected, result, "Should return only [0] when the limit is 0");
+        assertEquals(1, result.size(), "The size of the list should be exactly 1");
+    }
+
+    @Test
+    void testFibonacciUpToOne() {
+        // Arrange
+        List<Integer> expected = List.of(0, 1, 1);
+        
+        // Act
+        List<Integer> result = App.fibonacciUpTo(1);
+        
+        // Assert
+        assertEquals(expected, result, "Should return [0, 1, 1] when the limit is 1");
+    }
+
+    @Test
+    void testFibonacciUpToNegative() {
+        // Arrange & Act & Assert combined for Exceptions
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            App.fibonacciUpTo(-5);
+        }, "Should throw IllegalArgumentException for negative input");
+        
+        // Additional Assert to verify the exception message
+        assertEquals("Negative input", exception.getMessage(), "Exception message should match exactly");
+    }
+
+
+    // ==========================================
+    // בדיקות עבור הפונקציה charFrequency
+    // ==========================================
+
+    @Test
+    void testCharFrequencyNormalString() {
+        // Arrange
+        String input = "hello";
+        Map<Character, Integer> expected = Map.of('h', 1, 'e', 1, 'l', 2, 'o', 1);
+
+        // Act
+        Map<Character, Integer> result = App.charFrequency(input);
+
+        // Assert
+        assertEquals(expected, result, "Should return a map with correct character frequencies for 'hello'");
+        assertEquals(2, result.get('l'), "Frequency of 'l' should be exactly 2");
+    }
+
+    @Test
+    void testCharFrequencyEmptyString() {
+        // Arrange
+        String input = "";
+
+        // Act
+        Map<Character, Integer> result = App.charFrequency(input);
+
+        // Assert
+        assertTrue(result.isEmpty(), "The returned map should be completely empty for an empty string");
+        assertEquals(0, result.size(), "The size of the map should be 0");
+    }
+
+    @Test
+    void testCharFrequencyCaseSensitivityAndSpaces() {
+        // Arrange
+        String input = "A a!";
+        Map<Character, Integer> expected = Map.of('A', 1, ' ', 1, 'a', 1, '!', 1);
+
+        // Act
+        Map<Character, Integer> result = App.charFrequency(input);
+
+        // Assert
+        assertEquals(expected, result, "Should treat uppercase, lowercase, spaces, and special characters differently");
+        assertTrue(result.containsKey(' '), "The map must contain a space character as a valid key");
+        assertEquals(4, result.size(), "The map should contain exactly 4 unique character keys");
+    }
+
+
+    // ==========================================
+    // בדיקות עבור הפונקציה mostCommonWord
+    // ==========================================
+
+    @Test
+    void testMostCommonWordNormalText() {
+        // Arrange
+        String text = "apple banana apple orange apple banana";
+        
+        // Act
+        String result = App.mostCommonWord(text);
+        
+        // Assert
+        assertEquals("apple", result, "The most common word should be 'apple'");
+        assertNotEquals("banana", result, "Should not return the second most common word");
+    }
+
+    @Test
+    void testMostCommonWordMixedCaseAndPunctuation() {
+        // Arrange
+        String text = "Hello world! hello, HELLO... world.";
+        
+        // Act
+        String result = App.mostCommonWord(text);
+        
+        // Assert
+        assertEquals("hello", result, "Should ignore case and punctuation, returning 'hello'");
+        assertTrue(result.equals(result.toLowerCase()), "The returned word must be entirely in lowercase");
+    }
+
+    @Test
+    void testMostCommonWordOnlyPunctuationException() {
+        // Arrange
+        String text = "!@# $%^ &*()";
+        
+        // Act & Assert
+        assertThrows(NoSuchElementException.class, () -> {
+            App.mostCommonWord(text);
+        }, "Should throw NoSuchElementException when the text contains no valid words");
+    }
+
+    @Test
+    void testMostCommonWordEmptyString() {
+        // Arrange
+        String text = "";
+        
+        // Act
+        String result = App.mostCommonWord(text);
+        
+        // Assert
+        assertEquals("", result, "An empty string returns an empty string as the split array contains one empty element");
+    }
+
 }
