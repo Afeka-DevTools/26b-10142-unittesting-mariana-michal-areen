@@ -4,11 +4,147 @@
 package org.example;
 
 import org.junit.jupiter.api.Test;
+import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 class AppTest {
-    @Test void appHasAGreeting() {
-        App classUnderTest = new App();
-        assertNotNull(classUnderTest.getGreeting(), "app should have a greeting");
+
+    // ==========================================
+    // בדיקות עבור הפונקציה reverse
+    // ==========================================
+
+    @Test
+    void testReverseNormalString() {
+        String result = App.reverse("hello");
+        assertEquals("olleh", result, "The string 'hello' should be reversed to 'olleh'");
+    }
+
+    @Test
+    void testReverseEmptyString() {
+        String result = App.reverse("");
+        assertEquals("", result, "An empty string should return an empty string");
+        assertTrue(result.isEmpty(), "Result should be empty");
+    }
+
+    @Test
+    void testReverseSingleCharacterString() {
+        String result = App.reverse("a");
+        assertEquals("a", result, "A single character string should remain the same");
+        assertEquals(1, result.length(), "Length should remain 1");
+    }
+
+    // ==========================================
+    // בדיקות עבור הפונקציה isPalindrome
+    // ==========================================
+
+    @Test
+    void testIsPalindromeNormalPositive() {
+        assertTrue(App.isPalindrome("racecar"), "'racecar' should be recognized as a palindrome");
+    }
+
+    @Test
+    void testIsPalindromeNormalNegative() {
+        assertFalse(App.isPalindrome("hello"), "'hello' is not a palindrome");
+    }
+
+    @Test
+    void testIsPalindromeWithSpacesAndCaps() {
+        assertTrue(App.isPalindrome("A man a plan a canal Panama"),
+                "The function should clear spaces and ignore case to find it is a palindrome");
+    }
+
+    // ==========================================
+    // בדיקות עבור הפונקציה isAnagram
+    // ==========================================
+
+    @Test
+    void testIsAnagramPositive() {
+        assertTrue(App.isAnagram("listen", "silent"), "Valid lowercase anagrams should return true");
+    }
+
+    @Test
+    void testIsAnagramNegative() {
+        assertFalse(App.isAnagram("hello", "world"), "Completely different words should return false");
+    }
+
+    @Test
+    void testIsAnagramWithSpacesAndCase() {
+        assertTrue(App.isAnagram("Dormitory", "Dirty room"),
+                "Anagrams with mixed case and spaces should return true as they should be ignored");
+    }
+
+    // ==========================================
+    // בדיקות עבור הפונקציה filterEvens
+    // ==========================================
+
+    @Test
+    void testFilterEvensNormalList() {
+        List<Integer> input = List.of(1, 2, 3, 4, 5);
+        List<Integer> expected = List.of(2, 4);
+        assertEquals(expected, App.filterEvens(input), "Should filter and return only even numbers");
+    }
+
+    @Test
+    void testFilterEvensAllEvens() {
+        List<Integer> input = List.of(2, 4, 6, 8);
+        List<Integer> expected = List.of(2, 4, 6, 8);
+        assertEquals(expected, App.filterEvens(input), "Should return the same list when all numbers are even");
+    }
+
+    @Test
+    void testFilterEvensAllOdds() {
+        List<Integer> input = List.of(1, 3, 5, 7);
+        List<Integer> result = App.filterEvens(input);
+        assertTrue(result.isEmpty(), "Should return an empty list when all numbers are odd");
+    }
+
+    @Test
+    void testFilterEvensEmptyList() {
+        List<Integer> input = List.of();
+        List<Integer> result = App.filterEvens(input);
+        assertTrue(result.isEmpty(), "Should return an empty list when the input list is empty");
+    }
+
+    // ==========================================
+    // בדיקות עבור הפונקציות המתמטיות
+    // ==========================================
+
+    @Test
+    void testAdd_Normative() {
+        assertEquals(9, App.add(5, 4), "5+4 should equal 9");
+    }
+
+    @Test
+    void testAdd_EdgeCases() {
+        assertEquals(3, App.add(5, -2), "5+(-2) should equal 3");
+        assertEquals(0, App.add(0, 0), "0+0 should equal 0");
+        assertEquals(7, App.add(7, 0), "7+0 should equal 7");
+    }
+
+    @Test
+    void testIsPrime() {
+        assertTrue(App.isPrime(7), "7 is a prime number");
+        assertFalse(App.isPrime(4), "4 is not a prime number");
+        assertFalse(App.isPrime(1), "1 is not prime");
+        assertFalse(App.isPrime(0), "0 is not prime");
+        assertFalse(App.isPrime(-5), "Negative numbers are not prime");
+    }
+
+    @Test
+    void testFactorial() {
+        assertEquals(120, App.factorial(5), "Factorial of 5 should be 120");
+        assertEquals(1, App.factorial(0), "Factorial of 0 should be 1");
+        assertThrows(IllegalArgumentException.class, () -> {
+            App.factorial(-1);
+        }, "Factorial of a negative number should throw IllegalArgumentException");
+    }
+
+    @Test
+    void testAverage() {
+        assertEquals(2.0, App.average(new int[]{1, 2, 3}), 0.001, "Average of {1, 2, 3} should be 2.0");
+        assertEquals(2.5, App.average(new int[]{2, 3}), 0.001, "Average of {2, 3} should be 2.5");
+        assertThrows(IllegalArgumentException.class, () -> {
+            App.average(new int[]{});
+        }, "Calculating average of an empty array should throw IllegalArgumentException");
     }
 }
